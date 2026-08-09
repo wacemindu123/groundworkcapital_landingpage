@@ -78,11 +78,11 @@ img { max-width: 100%; }
 .mark i:nth-child(2) { width: 16px; }
 .mark i:nth-child(3) { width: 22px; background: var(--orange); }
 
-.mark--lg { gap: 3px; }
-.mark--lg i { height: 4.5px; }
-.mark--lg i:nth-child(1) { width: 13px; }
-.mark--lg i:nth-child(2) { width: 21px; }
-.mark--lg i:nth-child(3) { width: 29px; }
+.mark--lg { gap: 4px; }
+.mark--lg i { height: 6px; }
+.mark--lg i:nth-child(1) { width: 19px; }
+.mark--lg i:nth-child(2) { width: 30px; }
+.mark--lg i:nth-child(3) { width: 42px; }
 
 .mark--sm { gap: 1.5px; }
 .mark--sm i { height: 2px; background: var(--bone); }
@@ -146,7 +146,7 @@ img { max-width: 100%; }
 /* ─────────────────────────── hero ─────────────────────────── */
 
 .hero {
-  display: grid; grid-template-columns: 1fr 460px; gap: 64px; align-items: center;
+  display: grid; grid-template-columns: 1fr 540px; gap: 48px; align-items: center;
   padding: 96px var(--gutter) 84px;
 }
 
@@ -174,29 +174,37 @@ img { max-width: 100%; }
 
 .hero__visual { display: flex; justify-content: center; }
 
-.orbit { position: relative; width: 460px; height: 560px; }
+/* --node drives dot, label offset and popover position together, so the
+   whole diagram rescales from one value per breakpoint. */
+.orbit {
+  --node: 58px;
+  position: relative; width: 100%; max-width: 540px; height: 620px;
+}
 
 .orbit__core { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 10; }
 
-.orb { position: relative; width: 72px; height: 72px; }
-.orb canvas { width: 72px; height: 72px; display: block; }
+.orb { position: relative; width: 104px; height: 104px; }
+.orb canvas { width: 104px; height: 104px; display: block; }
 .orb .mark {
   position: absolute; left: 50%; top: 50%;
   transform: translate(-50%, -50%);
 }
 
+/* Offset clears the full 104px orb (core box is orb-height tall). */
 .orbit__core-label {
-  position: absolute; top: 80px; left: 50%; transform: translateX(-50%);
+  position: absolute; top: 120px; left: 50%; transform: translateX(-50%);
   white-space: nowrap; font-family: var(--font-mono);
-  font-size: 9px; letter-spacing: .14em; color: var(--muted2);
+  font-size: 10px; letter-spacing: .14em; color: var(--muted2);
 }
 
+/* Width is set per-node in JS from the current radius; the transparent
+   head keeps the line clear of the 104px orb at every size. */
 .spoke {
   position: absolute; left: 50%; top: 50%;
-  width: 116px; height: 1px; transform-origin: 0 0;
+  height: 1px; transform-origin: 0 0;
   background: linear-gradient(90deg,
-    rgba(26,23,18,0) 0, rgba(26,23,18,0) 52px,
-    rgba(26,23,18,.1) 60px, rgba(26,23,18,.1) 100%);
+    rgba(26,23,18,0) 0, rgba(26,23,18,0) 58px,
+    rgba(26,23,18,.1) 68px, rgba(26,23,18,.1) 100%);
 }
 
 .node { position: absolute; left: 50%; top: 50%; cursor: pointer; }
@@ -210,24 +218,26 @@ img { max-width: 100%; }
 
 .node__dot {
   position: absolute; left: 0; top: 0;
-  width: 40px; height: 40px; border-radius: 50%;
+  width: var(--node); height: var(--node); border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   background: var(--ink); color: var(--bone); border: 2px solid var(--ink);
-  box-shadow: 0 4px 12px rgba(26,23,18,.18);
+  box-shadow: 0 4px 14px rgba(26,23,18,.18);
   transform: translate(-50%, -50%) scale(1);
   transition: transform .3s, background .3s, border-color .3s, box-shadow .3s, color .3s;
+  padding: 0;
 }
+.node__dot svg { width: 40%; height: 40%; }
 
 .node__label {
-  position: absolute; top: 28px; left: 50%;
+  position: absolute; top: calc(var(--node) / 2 + 10px); left: 50%;
   transform: translateX(-50%) scale(1);
   transition: transform .3s, color .3s;
   white-space: nowrap; font-family: var(--font-mono);
-  font-size: 10px; font-weight: 500; letter-spacing: .14em;
+  font-size: 11px; font-weight: 500; letter-spacing: .14em;
   color: var(--muted2); background: var(--bone); padding: 1px 5px;
 }
 
-.node.is-open  .node__dot { background: var(--orange); border-color: var(--orange); color: #FFF; transform: translate(-50%, -50%) scale(1.5); box-shadow: 0 0 0 6px rgba(226,89,31,.18); }
+.node.is-open  .node__dot { background: var(--orange); border-color: var(--orange); color: #FFF; transform: translate(-50%, -50%) scale(1.35); box-shadow: 0 0 0 8px rgba(226,89,31,.18); }
 .node.is-open  .node__label { color: var(--ink); transform: translateX(-50%) scale(1.25); }
 .node.is-rel   .node__dot { background: var(--bone-card); border-color: var(--orange); color: var(--orange); animation: gwSoftPulse 1.2s ease-in-out infinite; }
 .node.is-open .node__glow,
@@ -235,8 +245,8 @@ img { max-width: 100%; }
 
 /* node detail popover */
 .node__card {
-  position: absolute; top: 56px; left: 50%; transform: translateX(-50%);
-  width: 256px; background: var(--bone-card); color: var(--ink);
+  position: absolute; top: calc(var(--node) / 2 + 46px); left: 50%; transform: translateX(-50%);
+  width: 268px; background: var(--bone-card); color: var(--ink);
   border: 1px solid rgba(26,23,18,.2); border-radius: 8px; padding: 16px;
   box-shadow: 0 24px 60px rgba(26,23,18,.25);
   cursor: default; z-index: 400; text-align: left;
@@ -498,8 +508,8 @@ img { max-width: 100%; }
 
 @media (max-width: 1180px) {
   :root { --gutter: 40px; }
-  .hero { grid-template-columns: 1fr 400px; gap: 40px; }
-  .orbit { width: 400px; }
+  .hero { grid-template-columns: 1fr 470px; gap: 40px; }
+  .orbit { max-width: 470px; height: 560px; }
   .levers { grid-template-columns: 340px 1fr; gap: 32px; }
   .levers__detail { padding: 34px 32px 32px; }
   .split { grid-template-columns: 160px 1fr; gap: 32px; }
@@ -523,7 +533,7 @@ img { max-width: 100%; }
 
   .hero { grid-template-columns: 1fr; padding: 64px var(--gutter) 56px; gap: 48px; }
   .hero__visual { order: 2; }
-  .orbit { width: 100%; max-width: 420px; height: 480px; }
+  .orbit { --node: 52px; max-width: 480px; height: 540px; }
 
   .split, .split--tight { grid-template-columns: 1fr; gap: 16px; }
   .section-num { padding-top: 0; }
@@ -549,8 +559,9 @@ img { max-width: 100%; }
   .band { padding-top: 64px; padding-bottom: 64px; }
   .band--dark { padding-top: 64px; padding-bottom: 64px; }
 
-  .orbit { height: 420px; }
-  .node__card { width: 220px; }
+  .orbit { --node: 46px; height: 440px; }
+  .node__label { font-size: 10px; }
+  .node__card { width: 224px; }
 
   .card { padding: 26px 22px 30px; }
   .card__num { margin-bottom: 28px; }

@@ -90,12 +90,17 @@
     var hintEl = $('#orbit-hint');
     if (!root || !nodesEl || !spokesEl) return;
 
-    // 150px matches the source design; shrink it on narrow screens so the
-    // node labels at 3 and 9 o'clock stay inside the container.
-    var RADIUS = 150;
+    // Radius grows to fill the column but is capped so the widest node label
+    // (roughly 0.93 of the radius out, at the drift extreme) stays inside.
+    var MAX_RADIUS = 218;
+    var RADIUS = MAX_RADIUS;
+    var NODE = 58;
+
     function measure() {
       var w = root.clientWidth;
-      RADIUS = Math.max(96, Math.min(150, w / 2 - 40));
+      var declared = parseFloat(getComputedStyle(root).getPropertyValue('--node'));
+      NODE = declared || 58;
+      RADIUS = Math.max(92, Math.min(MAX_RADIUS, (w / 2 - 42) / 0.93));
     }
 
     var hAngle = 270;
@@ -116,7 +121,7 @@
 
       var glow = document.createElement('div');
       glow.className = 'node__glow';
-      var g = Math.round(item.energy * 0.5 + 40);
+      var g = Math.round(item.energy * 0.7 + 58);
       glow.style.width = g + 'px';
       glow.style.height = g + 'px';
 
@@ -234,6 +239,7 @@
         n.wrap.classList.toggle('is-rel', isRel);
         n.dot.setAttribute('aria-expanded', String(isOpen));
 
+        n.spoke.style.width = Math.round(RADIUS - NODE / 2 - 4) + 'px';
         n.spoke.style.transform = 'rotate(' + (Math.round(deg * 10) / 10) + 'deg)';
         n.spoke.style.transition = gliding ? 'transform .7s cubic-bezier(.4,0,.2,1)' : 'none';
       });
@@ -297,7 +303,7 @@
     var canvas = $('#orb-canvas');
     if (!canvas) return;
 
-    var SIZE = 72;
+    var SIZE = 104;
     var raf = null;
 
     function start() {
