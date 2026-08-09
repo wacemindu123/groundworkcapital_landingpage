@@ -11,7 +11,7 @@ Built as a static site: no framework, no build step, no runtime dependencies. Op
 index.html              Full page markup
 assets/css/styles.css   Design tokens, layout, responsive rules
 assets/js/main.js       Hero orbit, WebGL orb, levers, reveals, newsletter
-assets/img/             Team portraits (WebP with JPEG fallback) and social card
+assets/img/             Team portraits (WebP) and social card
 favicon.svg             Brand mark
 vercel.json             Clean URLs, asset caching, security headers
 ```
@@ -66,8 +66,13 @@ them at a real list provider before launch.
 
 ## Images
 
-Source portraits were 1254x1254 PNGs totalling 6.7 MB. They ship here as 900x900
-WebP with JPEG fallbacks, about 149 KB for all three.
+Source portraits were 1254x1254 PNGs totalling 6.7 MB. They ship here as 660x825
+WebP cropped to the 4:5 display box, about 89 KB for all three, plus a generated
+1200x630 social card.
+
+WebP is served without a raster fallback, which covers roughly 97% of browsers
+(Chrome 32+, Firefox 65+, Safari 14+, Edge 18+). Add a `<picture>` element with
+JPEG sources if you need to reach older clients.
 
 ## Deployment
 
