@@ -92,7 +92,7 @@
 
     // Radius grows to fill the column but is capped so the widest node label
     // (roughly 0.93 of the radius out, at the drift extreme) stays inside.
-    var MAX_RADIUS = 240;
+    var MAX_RADIUS = 330;
     var RADIUS = MAX_RADIUS;
     var NODE = 62;
 
@@ -309,8 +309,25 @@
     var canvas = $('#orb-canvas');
     if (!canvas) return;
 
-    var SIZE = 112;
     var raf = null;
+    var glRef = null, uResRef = null;
+
+    // The orb's CSS size now varies by breakpoint, so read it rather than
+    // assume it, and resize the drawing buffer when it changes.
+    function cssSize() {
+      return Math.round(canvas.getBoundingClientRect().width) || 112;
+    }
+
+    function resizeBuffer() {
+      if (!glRef) return;
+      var dpr = window.devicePixelRatio || 1;
+      var s = cssSize();
+      if (canvas.width === Math.round(s * dpr)) return;
+      canvas.width = Math.round(s * dpr);
+      canvas.height = Math.round(s * dpr);
+      glRef.viewport(0, 0, canvas.width, canvas.height);
+      if (uResRef) glRef.uniform3f(uResRef, canvas.width, canvas.height, canvas.width / canvas.height);
+    }
 
     function start() {
       var gl = canvas.getContext('webgl', { alpha: true, premultipliedAlpha: false, antialias: true });
@@ -341,9 +358,11 @@
       if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) { fallback(); return; }
       gl.useProgram(prog);
 
+      glRef = gl;
       var dpr = window.devicePixelRatio || 1;
-      canvas.width = SIZE * dpr;
-      canvas.height = SIZE * dpr;
+      var s = cssSize();
+      canvas.width = Math.round(s * dpr);
+      canvas.height = Math.round(s * dpr);
 
       var buf = gl.createBuffer();
       gl.bindBuffer(gl.ARRAY_BUFFER, buf);
@@ -364,7 +383,14 @@
       var uH = gl.getUniformLocation(prog, 'hover');
       var uRot = gl.getUniformLocation(prog, 'rot');
       var uHI = gl.getUniformLocation(prog, 'hoverIntensity');
+      uResRef = uR;
       gl.uniform3f(uR, canvas.width, canvas.height, canvas.width / canvas.height);
+
+      var orbResizeTimer = null;
+      window.addEventListener('resize', function () {
+        clearTimeout(orbResizeTimer);
+        orbResizeTimer = setTimeout(resizeBuffer, 150);
+      });
 
       var rot = 0, last = 0;
 
