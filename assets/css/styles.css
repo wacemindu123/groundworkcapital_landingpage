@@ -78,11 +78,11 @@ img { max-width: 100%; }
 .mark i:nth-child(2) { width: 16px; }
 .mark i:nth-child(3) { width: 22px; background: var(--orange); }
 
-.mark--lg { gap: 4px; }
-.mark--lg i { height: 6px; }
-.mark--lg i:nth-child(1) { width: 19px; }
-.mark--lg i:nth-child(2) { width: 30px; }
-.mark--lg i:nth-child(3) { width: 42px; }
+.mark--lg { gap: 4.5px; }
+.mark--lg i { height: 6.5px; }
+.mark--lg i:nth-child(1) { width: 21px; }
+.mark--lg i:nth-child(2) { width: 33px; }
+.mark--lg i:nth-child(3) { width: 46px; }
 
 .mark--sm { gap: 1.5px; }
 .mark--sm i { height: 2px; background: var(--bone); }
@@ -146,7 +146,7 @@ img { max-width: 100%; }
 /* ─────────────────────────── hero ─────────────────────────── */
 
 .hero {
-  display: grid; grid-template-columns: 1fr 540px; gap: 48px; align-items: center;
+  display: grid; grid-template-columns: 1fr 600px; gap: 48px; align-items: center;
   padding: 96px var(--gutter) 84px;
 }
 
@@ -177,34 +177,34 @@ img { max-width: 100%; }
 /* --node drives dot, label offset and popover position together, so the
    whole diagram rescales from one value per breakpoint. */
 .orbit {
-  --node: 58px;
-  position: relative; width: 100%; max-width: 540px; height: 620px;
+  --node: 62px;
+  position: relative; width: 100%; max-width: 600px; height: 700px;
 }
 
 .orbit__core { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 10; }
 
-.orb { position: relative; width: 104px; height: 104px; }
-.orb canvas { width: 104px; height: 104px; display: block; }
+.orb { position: relative; width: 112px; height: 112px; }
+.orb canvas { width: 112px; height: 112px; display: block; }
 .orb .mark {
   position: absolute; left: 50%; top: 50%;
   transform: translate(-50%, -50%);
 }
 
-/* Offset clears the full 104px orb (core box is orb-height tall). */
+/* Offset clears the full 112px orb (core box is orb-height tall). */
 .orbit__core-label {
-  position: absolute; top: 120px; left: 50%; transform: translateX(-50%);
+  position: absolute; top: 126px; left: 50%; transform: translateX(-50%);
   white-space: nowrap; font-family: var(--font-mono);
   font-size: 10px; letter-spacing: .14em; color: var(--muted2);
 }
 
 /* Width is set per-node in JS from the current radius; the transparent
-   head keeps the line clear of the 104px orb at every size. */
+   head keeps the line clear of the 112px orb at every size. */
 .spoke {
   position: absolute; left: 50%; top: 50%;
   height: 1px; transform-origin: 0 0;
   background: linear-gradient(90deg,
-    rgba(26,23,18,0) 0, rgba(26,23,18,0) 58px,
-    rgba(26,23,18,.1) 68px, rgba(26,23,18,.1) 100%);
+    rgba(26,23,18,0) 0, rgba(26,23,18,0) 62px,
+    rgba(26,23,18,.1) 72px, rgba(26,23,18,.1) 100%);
 }
 
 .node { position: absolute; left: 50%; top: 50%; cursor: pointer; }

@@ -92,15 +92,21 @@
 
     // Radius grows to fill the column but is capped so the widest node label
     // (roughly 0.93 of the radius out, at the drift extreme) stays inside.
-    var MAX_RADIUS = 218;
+    var MAX_RADIUS = 240;
     var RADIUS = MAX_RADIUS;
-    var NODE = 58;
+    var NODE = 62;
 
     function measure() {
       var w = root.clientWidth;
+      var h = root.clientHeight;
       var declared = parseFloat(getComputedStyle(root).getPropertyValue('--node'));
-      NODE = declared || 58;
-      RADIUS = Math.max(92, Math.min(MAX_RADIUS, (w / 2 - 42) / 0.93));
+      NODE = declared || 62;
+      // Width bound: widest label sits ~0.93r out at the drift extreme.
+      // Height bound: the bottom node's label (offset 10px below the dot,
+      // ~15px tall) must clear the hint line sitting 18px off the bottom.
+      var byWidth = (w / 2 - 42) / 0.93;
+      var byHeight = h / 2 - NODE / 2 - 66;
+      RADIUS = Math.max(92, Math.min(MAX_RADIUS, byWidth, byHeight));
     }
 
     var hAngle = 270;
@@ -121,7 +127,7 @@
 
       var glow = document.createElement('div');
       glow.className = 'node__glow';
-      var g = Math.round(item.energy * 0.7 + 58);
+      var g = Math.round(item.energy * 0.75 + 62);
       glow.style.width = g + 'px';
       glow.style.height = g + 'px';
 
@@ -303,7 +309,7 @@
     var canvas = $('#orb-canvas');
     if (!canvas) return;
 
-    var SIZE = 104;
+    var SIZE = 112;
     var raf = null;
 
     function start() {
