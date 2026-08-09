@@ -146,7 +146,7 @@ img { max-width: 100%; }
 /* ─────────────────────────── hero ─────────────────────────── */
 
 .hero {
-  display: grid; grid-template-columns: minmax(660px, 0.9fr) minmax(0, 1fr);
+  display: grid; grid-template-columns: minmax(660px, 1fr) minmax(0, 520px);
   gap: 48px; align-items: center;
   padding: 96px var(--gutter) 84px;
 }
@@ -178,10 +178,13 @@ img { max-width: 100%; }
 /* --node drives dot, label offset and popover position together, so the
    whole diagram rescales from one value per breakpoint. */
 .orbit {
-  --node: 62px;
-  --orb: 112px;
-  position: relative; width: 100%; max-width: 820px;
-  aspect-ratio: 1 / 1.14; max-height: 860px;
+  --node: 46px;
+  /* unitless so it can drive both a length and a scale() factor;
+     scale() rejects a length, which silently voids the whole transform. */
+  --orb-n: 80;
+  --orb: calc(var(--orb-n) * 1px);
+  position: relative; width: 100%; max-width: 470px;
+  aspect-ratio: 1 / 1.2; max-height: 580px;
 }
 
 .orbit__core { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 10; }
@@ -190,7 +193,7 @@ img { max-width: 100%; }
 .orb canvas { width: 100%; height: 100%; display: block; }
 .orb .mark {
   position: absolute; left: 50%; top: 50%;
-  transform: translate(-50%, -50%) scale(calc(var(--orb) / 112));
+  transform: translate(-50%, -50%) scale(calc(var(--orb-n) / 142));
 }
 
 /* Offset clears the full orb (the core box is orb-height tall). */
@@ -512,14 +515,13 @@ img { max-width: 100%; }
 /* ═══════════════════════════ responsive ═══════════════════════════ */
 
 @media (min-width: 1700px) {
-  .hero { padding-top: 76px; padding-bottom: 68px; }
-  .orbit { --node: 70px; --orb: 138px; }
+  .orbit { --node: 50px; --orb-n: 88; }
 }
 
 @media (max-width: 1180px) {
   :root { --gutter: 40px; }
-  .hero { grid-template-columns: minmax(580px, 1fr) minmax(0, 1fr); gap: 40px; }
-  .orbit { max-width: 520px; }
+  .hero { grid-template-columns: minmax(520px, 1fr) minmax(0, 420px); gap: 40px; }
+  .orbit { max-width: 420px; }
   .levers { grid-template-columns: 340px 1fr; gap: 32px; }
   .levers__detail { padding: 34px 32px 32px; }
   .split { grid-template-columns: 160px 1fr; gap: 32px; }
@@ -543,7 +545,7 @@ img { max-width: 100%; }
 
   .hero { grid-template-columns: 1fr; padding: 64px var(--gutter) 56px; gap: 48px; }
   .hero__visual { order: 2; }
-  .orbit { --node: 52px; max-width: 480px; aspect-ratio: auto; height: 560px; }
+  .orbit { --node: 46px; max-width: 420px; aspect-ratio: auto; height: 500px; }
 
   .split, .split--tight { grid-template-columns: 1fr; gap: 16px; }
   .section-num { padding-top: 0; }
@@ -569,7 +571,7 @@ img { max-width: 100%; }
   .band { padding-top: 64px; padding-bottom: 64px; }
   .band--dark { padding-top: 64px; padding-bottom: 64px; }
 
-  .orbit { --node: 46px; height: 500px; }
+  .orbit { --node: 42px; height: 440px; }
   .node__label { font-size: 10px; }
   .node__card { width: 224px; }
 

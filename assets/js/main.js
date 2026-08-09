@@ -92,15 +92,15 @@
 
     // Radius grows to fill the column but is capped so the widest node label
     // (roughly 0.93 of the radius out, at the drift extreme) stays inside.
-    var MAX_RADIUS = 330;
+    var MAX_RADIUS = 175;
     var RADIUS = MAX_RADIUS;
-    var NODE = 62;
+    var NODE = 46;
 
     function measure() {
       var w = root.clientWidth;
       var h = root.clientHeight;
       var declared = parseFloat(getComputedStyle(root).getPropertyValue('--node'));
-      NODE = declared || 62;
+      NODE = declared || 46;
       // Width bound: widest label sits ~0.93r out at the drift extreme.
       // Height bound: the bottom node's label (offset 10px below the dot,
       // ~15px tall) must clear the hint line sitting 18px off the bottom.
